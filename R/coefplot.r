@@ -283,7 +283,7 @@ coefplot.lm <- function(...)
 
 #' coefplot.glm
 #' 
-# Dotplot for glm coefficients
+#' Dotplot for glm coefficients
 #'
 # A graphical display of the coefficients and standard errors from a fitted glm model
 #'

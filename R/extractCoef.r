@@ -238,7 +238,6 @@ extract.coef.rxLogit <- function(model, ...)
 #' diaY <- build.y(price ~ carat + cut + x - 1, data=diamonds)
 #' modG1 <- glmnet(x=diaX, y=diaY)
 #' extract.coef(modG1)
-#' }
 #' \dontshow{\}}
 #' 
 extract.coef.glmnet <- function(model, lambda=stats::median(model$lambda), ...)
@@ -302,10 +301,7 @@ extract.coef.cv.glmnet <- function(model, lambda="lambda.min", ...)
 #' @return A \code{\link{data.frame}} containing the coefficient, the standard 
 #' error and the variable name.
 #' @examples
-#' \dontshow{
-#' if(requireNamespace('maxLik', quietly=TRUE))
-#' \{
-#' }
+#' \dontshow{if(requireNamespace('maxLik', quietly=TRUE))\{}
 #' library(maxLik)
 #' loglik <- function(param) {
 #'  mu <- param[1]
@@ -317,10 +313,7 @@ extract.coef.cv.glmnet <- function(model, lambda="lambda.min", ...)
 #' N <- length(x)
 #' res <- maxLik(loglik, start=c(0,1)) # use 'wrong' start values
 #' extract.coef(res)
-#' }
-#' \dontshow{
-#' \}
-#' }
+#' \dontshow{\}}
 #' 
 extract.coef.maxLik <- function(model, ...)
 {
