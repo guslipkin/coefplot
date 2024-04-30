@@ -216,6 +216,11 @@ extract.coef.rxLogit <- function(model, ...)
     extract.coef.default(model=model, ...)
 }
 
+#' @export
+extract.coef.elnet <- function(model, ...) {
+    extract.coef.glmnet(model = model, ...)
+}
+
 #' @title extract.coef.glmnet
 #' @description Extract Coefficient Information from Models
 #' @details Gets the coefficient values and variable names from a model.  Since 
@@ -377,29 +382,34 @@ extract.coef.xgb.Booster <- function(model, feature_names=NULL,
         # convert to a tibble
         tibble::as_tibble() %>% 
         # return NAs for SE
-        dplyr::mutate(SE=NA_real_) %>% 
+        dplyr::mutate('SE' = NA_real_) %>% 
         # rename some columns
-        dplyr::select('Value'='Weight', 'SE'='SE', 'Coefficient'='Feature') %>% 
-        dplyr::mutate_at(
-            .vars='Coefficient',
-            .funs=~factor(., 
-                          levels=model$feature_names,
-                          labels=model$feature_names
+        dplyr::select('Value'='Weight', 'SE' = 'SE', 'Coefficient'='Feature') %>% 
+        dplyr::mutate(
+            dplyr::across(
+                .cols = 'Coefficient',
+                .fns = \(x) { factor(x, levels = model$feature_names, labels = model$feature_names) }
             )
-        ) %>% 
-        dplyr::arrange_at('Coefficient') %>%
-        dplyr::mutate_at(
-            .vars='Coefficient',
-            .funs=as.character
+        ) %>%
+        dplyr::arrange(.data$Coefficient) %>%
+        dplyr::mutate(
+            dplyr::across(
+                .cols = 'Coefficient',
+                .fns = as.character
+            )
         )
     
     if(removeNonSelected)
     {
         # remove (close to) 0 Values
-        theCoef <- dplyr::filter_at(
-            theCoef,
-            .vars='Value', 
-            .vars_predicate=dplyr::all_vars(abs(.) > zero_threshold))
+        theCoef <-
+            theCoef %>%
+            dplyr::filter(
+                dplyr::if_all(
+                    .cols = 'Value',
+                    .fns = \(x) { abs(x) > zero_threshold }
+                )
+            )
     }
     
     return(theCoef)

@@ -25,7 +25,6 @@ extractPath <- function(model, ...)
 
 #' @rdname extractPath
 #' @export
-#' @importFrom magrittr "%>%"
 #' @param intercept If \code{FALSE} (the default), no intercept will be provided
 extractPath.glmnet <- function(model, intercept=FALSE, ...)
 {
@@ -33,7 +32,8 @@ extractPath.glmnet <- function(model, intercept=FALSE, ...)
         tibble::tibble(lambda=log(model$lambda)),
         model %>% 
             glmnet::coef.glmnet() %>% 
-            as.matrix() %>% t() %>% 
+            as.matrix() %>% 
+            t() %>% 
             tibble::as_tibble()
     ) %>% 
         dplyr::arrange(.data$lambda)
@@ -41,7 +41,7 @@ extractPath.glmnet <- function(model, intercept=FALSE, ...)
     if(!intercept)
     {
         thePath <- thePath %>% 
-            dplyr::select(-dplyr::matches('(Intercept)'))
+            dplyr::select(-tidyselect::matches('(Intercept)'))
     }
     
     return(thePath)
@@ -50,7 +50,6 @@ extractPath.glmnet <- function(model, intercept=FALSE, ...)
 
 #' @rdname extractPath
 #' @export
-#' @importFrom magrittr "%>%"
 extractPath.cv.glmnet <- function(model, ...)
 {
     extractPath(model$glmnet.fit, ...)

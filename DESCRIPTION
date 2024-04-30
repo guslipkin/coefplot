@@ -26,7 +26,8 @@ Imports:
     magrittr,
     purrr,
     plotly,
-    rlang
+    rlang,
+    tidyselect
 ByteCompile: TRUE
 Packaged: 2018-01-02 Jared
 Suggests:

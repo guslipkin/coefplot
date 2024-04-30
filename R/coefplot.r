@@ -21,7 +21,6 @@
 #' @return A ggplot2 object or data.frame.  See details in \code{\link{coefplot.lm}} for more information
 #' @export coefplot plotcoef
 #' @keywords coefplot dotplot coefficient coefficients model lm glm rxLinMod linear
-#' @import ggplot2 plyr useful
 #' @examples
 #' 
 #' data(diamonds)

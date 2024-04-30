@@ -147,12 +147,12 @@ pos_dodgev <- function(df, height) {
 #'   position = position_dodge(width = 0.90))
 #'
 position_dodgev <- function(height = NULL) {
-    ggproto(NULL, PositionDodgeV, height = height)
+    ggplot2::ggproto(NULL, PositionDodgeV, height = height)
 }
 
 
 
-PositionDodgeV <- ggproto("PositionDodgeV", Position,
+PositionDodgeV <- ggplot2::ggproto("PositionDodgeV", ggplot2::Position,
                           required_aes = "y",
                           height = NULL,
                           setup_params = function(self, data) {

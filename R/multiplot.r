@@ -88,7 +88,8 @@
 #'
 multiplot <- function(..., 
                       title="Coefficient Plot", xlab="Value", ylab="Coefficient", 
-                      innerCI=1, outerCI=2, 
+                      innerCI=1, 
+                      outerCI=2, 
                       lwdInner=1, 
                       lwdOuter=(Sys.info()["sysname"] != 'Windows')*0.5, 
                       pointSize=3, dodgeHeight=1,  
@@ -164,14 +165,17 @@ multiplot <- function(...,
 #    return(theDots)
     # need to change getModelInfo and buildModelCI and coefplot.lm so that shorten, factors and only are normal arguments and not part of ..., that way it will work better for this
     # get the modelCI for each model and make one big data.frame
-    modelCI <- ldply(theDots, .fun=buildModelCI, outerCI=outerCI, innerCI=innerCI, intercept=intercept, numeric=numeric, 
-                     sort=sort, decreasing=decreasing, factors=factors, shorten=shorten, coefficients=coefficients,
-                     predictors=predictors, strict=strict, newNames=newNames, trans=trans)
-    
+    modelCI <-
+        theDots |>
+        purrr::map(
+            .f = buildModelCI, 
+            outerCI=outerCI, innerCI=innerCI, intercept=intercept, 
+            numeric=numeric, sort=sort, decreasing=decreasing, factors=factors, 
+            shorten=shorten, coefficients=coefficients, predictors=predictors, strict=strict, newNames=newNames, trans=trans) %>%
+        dplyr::bind_rows(.id = 'Model') %>%
+        `rownames<-`(NULL)
     # Turn the Call into a unique identifier for each model
     #modelCI$Model <- as.factor(as.numeric(factor(modelCI$Model, levels=unique(modelCI$Model))))
-    modelCI$Model <- modelCI$.id
-    modelCI$.id <- NULL
     
     # if names are provided use those instead of the numbers
     if(!is.null(names))
@@ -190,7 +194,15 @@ multiplot <- function(...,
     ## if drop is true get rid of models without valid coefficients
     if(drop)
     {
-        notNA <- daply(modelCI, .variables="Model", function(x) { !all(is.na(x$Coef)) })
+        notNA <-
+            modelCI %>%
+            dplyr::group_by(.data$Model) %>%
+            dplyr::group_map(\(x, ...) { 
+                valid <- !all(is.na(x$Coefficient))
+                names(valid) <- x$Model[1]
+                return(valid)
+            }, .keep = TRUE) %>%
+            unlist()
         #return(which(notNA == TRUE))
         modelCI <- modelCI[modelCI$Model %in% names(which(notNA == TRUE)), ]
     }
@@ -213,20 +225,20 @@ multiplot <- function(...,
                                value="Value", coefficient=by,
                        horizontal=horizontal, facet=FALSE, scales="fixed")
     
-    theColorScale <- list("Coefficient"=scale_colour_discrete("Model", breaks=legendLabels), 
-                          "Model"=scale_color_manual(values=rep(color, length(unique(modelCI$Model))), guide='none'))
+    theColorScale <- list("Coefficient"=ggplot2::scale_colour_discrete("Model", breaks=legendLabels), 
+                          "Model"=ggplot2::scale_color_manual(values=rep(color, length(unique(modelCI$Model))), guide='none'))
     
-    theShapeScale <- list("NoShapes"=scale_shape_manual(values=rep(shape, length(unique(modelCI$Model))), guide='none'),
-                          "Shapes"=scale_shape_manual(values=1:length(unique(modelCI$Model)))
+    theShapeScale <- list("NoShapes"=ggplot2::scale_shape_manual(values=rep(shape, length(unique(modelCI$Model))), guide='none'),
+                          "Shapes"=ggplot2::scale_shape_manual(values=1:length(unique(modelCI$Model)))
                           )
     
-    theLinetypeScale <- list("NoShapes"=scale_linetype_manual(values=rep(linetype, length(unique(modelCI$Model))), guide='none'),
-                             "Shapes"=scale_linetype_manual(values=1:length(unique(modelCI$Model)))
+    theLinetypeScale <- list("NoShapes"=ggplot2::scale_linetype_manual(values=rep(linetype, length(unique(modelCI$Model))), guide='none'),
+                             "Shapes"=ggplot2::scale_linetype_manual(values=1:length(unique(modelCI$Model)))
                              )
 #     print(rep(linetype, length(unique(modelCI$Model))))
     p + theColorScale[[by]] + 
         theShapeScale[[plot.shapes+1]] + 
         theLinetypeScale[[plot.linetypes+1]] + 
-        theme(legend.position=legend.position) + 
-        if(!single) facet_wrap(~Model, scales=scales, ncol=ncol)
+        ggplot2::theme(legend.position=legend.position) + 
+        if(!single) ggplot2::facet_wrap(~Model, scales=scales, ncol=ncol)
 }

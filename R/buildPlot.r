@@ -81,14 +81,14 @@ buildPlotting.default <- function(
     }
     
     ## build the layer infos
-    outerCIGeom <- geom_errorbarh(
-        aes(xmin=.data$LowOuter, xmax=.data$HighOuter, color=.data$Model, linetype=.data$Model), 
+    outerCIGeom <- ggplot2::geom_errorbarh(
+        ggplot2::aes(xmin=.data$LowOuter, xmax=.data$HighOuter, color=.data$Model, linetype=.data$Model), 
         lwd=lwdOuter, height=errorHeight, position=position_dodgev(height=dodgeHeight),
         na.rm=TRUE
     )
     
-    innerCIGeom <- geom_errorbarh(
-        aes(xmin=.data$LowInner, xmax=.data$HighInner, color=.data$Model, linetype=.data$Model),
+    innerCIGeom <- ggplot2::geom_errorbarh(
+        ggplot2::aes(xmin=.data$LowInner, xmax=.data$HighInner, color=.data$Model, linetype=.data$Model),
         lwd=lwdInner, height=errorHeight, position=position_dodgev(height=dodgeHeight),
         na.rm=TRUE
     )
@@ -97,32 +97,32 @@ buildPlotting.default <- function(
     #ribbonGeom <- list(None=NULL, geom_ribbon(aes(ymin=LowOuter, ymax=HighOuter, group=Checkers), data=modelCI, fill=fillColor, alpha=alpha, lwd=lwdOuter))
     
     # point layer
-    pointGeom <- geom_point(aes(x=value, color=Model, shape=Model), size=pointSize, position=position_dodgev(height=dodgeHeight))
+    pointGeom <- ggplot2::geom_point(ggplot2::aes(x=value, color=.data$Model, shape=.data$Model), size=pointSize, position=position_dodgev(height=dodgeHeight))
 
     #colorAes <- list(None=NULL, Single=aes(color=as.factor(Model)))
-    colorScaleSingle <- scale_color_manual(values=rep(color, length(unique(modelCI$Model))), guide='none')
-    shapeScaleSingle <- scale_shape_manual(values=rep(shape, length(unique(modelCI$Model))), guide='none')
-    linetypeScaleSingle <- scale_linetype_manual(values=rep(linetype, length(unique(modelCI$Model))), guide='none')
+    colorScaleSingle <- ggplot2::scale_color_manual(values=rep(color, length(unique(modelCI$Model))), guide='none')
+    shapeScaleSingle <- ggplot2::scale_shape_manual(values=rep(shape, length(unique(modelCI$Model))), guide='none')
+    linetypeScaleSingle <- ggplot2::scale_linetype_manual(values=rep(linetype, length(unique(modelCI$Model))), guide='none')
     
-    xScale <- list(None=NULL, Single=scale_x_discrete())
+    xScale <- list(None=NULL, Single=ggplot2::scale_x_discrete())
     
     # faceting info
-    faceting <- list(None=NULL, Display=facet_wrap(~Checkers, scales=scales))
+    faceting <- list(None=NULL, Display=ggplot2::facet_wrap(~Checkers, scales=scales))
     
     # for a regular coefplot or a multiplot in seperate facets
     #p <- ggplot(data=modelCI, aes(x=value))
-    p <- ggplot(data=modelCI, aes(x=value, y=coefficient))    		# the basics of the plot
+    p <- ggplot2::ggplot(data=modelCI, ggplot2::aes(x=value, y=coefficient))    		# the basics of the plot
     #p <- p + colorAes[[1 + multi]] #                                    # in case model needs to be factorized, do it here
-    p <- p + geom_vline(xintercept=0, colour=zeroColor, linetype=zeroType, lwd=zeroLWD)		# the zero line
+    p <- p + ggplot2::geom_vline(xintercept=0, colour=zeroColor, linetype=zeroType, lwd=zeroLWD)		# the zero line
     p <- p + outerCIGeom +    				# the outer CI bars
         innerCIGeom						# the inner CI bars
     p <- p + pointGeom						# the points
     #p <- p + xScale[[1 + multi]]
-    p <- p + theme(axis.text.y=element_text(angle=textAngle, hjust=1), axis.text.x=element_text(angle=numberAngle, vjust=.5)) + 
-        labs(title=title, x=xlab, y=ylab)    # labeling and text info
+    p <- p + ggplot2::theme(axis.text.y=ggplot2::element_text(angle=textAngle, hjust=1), axis.text.x=ggplot2::element_text(angle=numberAngle, vjust=.5)) + 
+        ggplot2::labs(title=title, x=xlab, y=ylab)    # labeling and text info
     p <- p + if(!multi){ list(colorScaleSingle, shapeScaleSingle, linetypeScaleSingle) }
     p <- p + faceting[[facet + 1]]    	# faceting
-    p <- p + if(horizontal) coord_flip()
+    p <- p + if(horizontal) ggplot2::coord_flip()
     
     return(p)		# return the ggplot object
 }

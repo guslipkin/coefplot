@@ -8,7 +8,6 @@
 # #' 
 # #' @author Jared P. Lander
 # #' @aliases collidev
-# #' @import ggplot2
 # #' @export collidev
 # #' @return Not sure
 # #' @param data data

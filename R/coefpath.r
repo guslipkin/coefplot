@@ -34,7 +34,6 @@ coefpath <- function(model, ...)
 
 #' @rdname coefpath
 #' @export
-#' @importFrom magrittr "%>%"
 #' @param xlab x-axis label
 #' @param ylab y-axis label
 #' @param showLegend When to display the legend. Specify "always" to always show the legend. Specify "onmouseover" to only display it when a user mouses over the chart. Specify "follow" to have the legend show as overlay to the chart which follows the mouse. The default behavior is "auto", which results in "always" when more than one series is plotted and "onmouseover" when only a single series is plotted.
@@ -97,7 +96,6 @@ coefpath.glmnet <- function(model,
 
 #' @rdname coefpath
 #' @export
-#' @importFrom magrittr "%>%"
 #' @param colorMin Color for line showing lambda.min
 #' @param strokePatternMin Stroke pattern for line showing lambda.min
 #' @param labelMin Label for line showing lambda.min

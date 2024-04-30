@@ -82,7 +82,6 @@ matchCoefs <- function(model, ...)
 #' @details Matches coefficients to predictors using information from model matrices
 #' @author Jared P. Lander
 #' @aliases matchCoefs.default
-#' @import reshape2
 #' @param model Fitted model
 #' @param \dots Further arguments
 #' @return a data.frame matching predictors to coefficients
@@ -118,7 +117,7 @@ matchCoefs.default <- function(model, ...)
     factorMat$.Type <- attr(theTerms, "dataClasses")
     
     # melt it down for comparison
-    factorMelt <- melt(factorMat, id.vars=c(".Pred", ".Type"), variable.name="Term")
+    factorMelt <- tidyr::pivot_longer(factorMat, cols = c('.Pred', '.Type'), names_to = 'Term')
     factorMelt$Term <- as.character(factorMelt$Term)
     
     # only keep rows where there's a match
@@ -131,7 +130,7 @@ matchCoefs.default <- function(model, ...)
     }
     
     # join into the matching data.frame
-    matching <- join(matching, factorMelt, by="Term")
+    matching <- dplyr::left_join(matching, factorMelt, by = "Term")
     
     return(matching)
 }
@@ -228,7 +227,7 @@ getCoefsFromPredictorsRevo <- function(model, predictors=NULL, strict=FALSE, ...
         return(NULL)
     }
     
-    predMatcher <- subSpecials(predictors)[[1]]
+    predMatcher <- useful::subSpecials(predictors)[[1]]
     names(predMatcher) <- predictors
     
     # get coefficient names
@@ -245,7 +244,11 @@ getCoefsFromPredictorsRevo <- function(model, predictors=NULL, strict=FALSE, ...
         toKeep <- lapply(predMatcher, FUN=doRegex, matchAgainst=coefNames, pattern="(^| )%s($|,|=| for)")
     }
     
-    keepFrame <- ldply(toKeep, function(x) data.frame(Target=x))
+    # keepFrame <- ldply(toKeep, function(x) data.frame(Target=x))
+    keepFrame <-
+        toKeep %>%
+        purrr::map(\(x) data.frame('Target' = x)) |>
+        purrr::list_rbind()
     
     keptCoefsFromPredictors <- coefNames[keepFrame$Target]
     
