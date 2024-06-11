@@ -102,7 +102,7 @@ matchCoefs.default <- function(model, ...)
     factorMat$.Type <- attr(theTerms, "dataClasses")
     
     # melt it down for comparison
-    factorMelt <- melt(factorMat, id.vars=c(".Pred", ".Type"), variable.name="Term")
+    factorMelt <- reshape2::melt(factorMat, id.vars=c(".Pred", ".Type"), variable.name="Term")
     factorMelt$Term <- as.character(factorMelt$Term)
     
     # only keep rows where there's a match
