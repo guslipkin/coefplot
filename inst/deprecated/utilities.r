@@ -41,7 +41,7 @@ buildFactorDF <- function(modelFactorVars, modelModel, modelCoefs, shorten=TRUE,
 	specials <- c("!", "(", ")", "-", "=", ".")
 	
     ## go through and do the replacing
-	alterList <- subSpecials(varDF$VarAlter, varDF$PivotAlter, specialChars=specials)
+	alterList <- useful::subSpecials(varDF$VarAlter, varDF$PivotAlter, specialChars=specials)
     
     ## put the subbed values back
     varDF$VarAlter <- alterList[[1]]
@@ -147,7 +147,7 @@ rxVarMatcher <- function(modelFactorVars, modelCoefNames, modelCoefs, shorten=TR
 	specials <- c("!", "(", ")", "-", "=", ".")
 	
     # go through and do the replacing
-	alterList <- subSpecials(varDF$VarAlter, specialChars=specials)
+	alterList <- useful::subSpecials(varDF$VarAlter, specialChars=specials)
     
     # put the subbed values back
     varDF$VarAlter <- alterList[[1]]

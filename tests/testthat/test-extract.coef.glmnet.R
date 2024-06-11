@@ -4,7 +4,7 @@ library(xgboost)
 diaX <- useful::build.x(price ~ carat + cut + x - 1, data=diamonds, contrasts=FALSE)
 diaY <- useful::build.y(price ~ carat + cut + x - 1, data=diamonds)
 
-modG1 <- glmnet(x=diaX, y=diaY)
+modG1 <- glmnet::glmnet(x=diaX, y=diaY)
 coef1 <- extract.coef(modG1)
 
 test_that("The correct class is returned", {

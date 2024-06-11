@@ -8,7 +8,6 @@
 #' @seealso \code{\link{coefplot.lm}}
 #' @param model The fitted model with coefficients to be plotted
 #' @param \dots Further arguments such as shorten, only and factors
-#' @import stringr
 #' @rdname getModelInfo
 #' @return Information on the model
 #' @examples
@@ -42,7 +41,6 @@ getModelInfo <- function(model, ...)
 #' @param only logical; If factors has a value this determines how interactions are treated.  True means just that variable will be shown and not its interactions.  False means interactions will be included.
 #' @param shorten logical or character; If \code{FALSE} then coefficients for factor levels will include their variable name.  If \code{TRUE} coefficients for factor levels will be stripped of their variable names.  If a character vector of variables only coefficients for factor levels associated with those variables will the variable names stripped.
 #' @param \dots Further arguments
-#' @import stringr
 #' @rdname getModelInfo.lm
 ## @method getModelInfo lm
 #' @S3method getModelInfo lm
@@ -109,7 +107,6 @@ getModelInfo.lm <- function(model, shorten=TRUE, factors=NULL, only=NULL, ...)
 #' @param only logical; If factors has a value this determines how interactions are treated.  True means just that variable will be shown and not its interactions.  False means interactions will be included.
 #' @param shorten logical or character; If \code{FALSE} then coefficients for factor levels will include their variable name.  If \code{TRUE} coefficients for factor levels will be stripped of their variable names.  If a character vector of variables only coefficients for factor levels associated with those variables will the variable names stripped.
 #' @param \dots Further arguments
-#' @import stringr
 #' @rdname getModelInfo.rxLinMod
 ## @method getModelInfo rxLinMod
 #' @S3method getModelInfo rxLinMod
@@ -136,7 +133,7 @@ getModelInfo.rxLinMod <- function(model, shorten=TRUE, factors=NULL, only=NULL, 
     if(!is.null(factors))
     {
         # take care of special characters
-        factors <- subSpecials(factors, specialChars=specials)[[1]]
+        factors <- useful::subSpecials(factors, specialChars=specials)[[1]]
 
         # make a pipe seperated character of factors to keep
         toKeep <- paste(factors, collapse="|")
@@ -211,7 +208,6 @@ getModelInfo.rxLinMod <- function(model, shorten=TRUE, factors=NULL, only=NULL, 
 ## @param only logical; If factors has a value this determines how interactions are treated.  True means just that variable will be shown and not its interactions.  False means interactions will be included.
 ## @param shorten logical or character; If \code{FALSE} then coefficients for factor levels will include their variable name.  If \code{TRUE} coefficients for factor levels will be stripped of their variable names.  If a character vector of variables only coefficients for factor levels associated with those variables will the variable names stripped.
 #' @param \dots Further arguments.  See \code{\link{getModelInfo.rxLinMod}} for more information on this function's arguments.
-#' @import stringr
 #' @rdname getModelInfo.rxLogit
 ## @method getModelInfo rxLogit
 #' @S3method getModelInfo rxLogit

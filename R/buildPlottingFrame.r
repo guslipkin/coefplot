@@ -9,7 +9,6 @@
 #' @author Jared P. Lander
 #' @aliases buildModelCI
 #' @export buildModelCI
-#' @import plyr
 #' @param model A Fitted model such as from lm, glm
 #' @param \dots Arguments passed on onto other methods
 #' @return A \code{\link{data.frame}} listing coefficients and confidence bands.
@@ -38,7 +37,6 @@ buildModelCI <- function(model, ...)
 #' @export
 #' @rdname buildModelCI
 #' @method buildModelCI default
-#' @import plyr
 #' @param model A Fitted model such as from lm, glm
 #' @param innerCI How wide the inner confidence interval should be, normally 1 standard deviation.  If 0, then there will be no inner confidence interval.
 #' @param outerCI How wide the outer confidence interval should be, normally 2 standard deviations.  If 0, then there will be no outer confidence interval.
@@ -93,7 +91,7 @@ buildModelCI.default <- function(model, outerCI=2, innerCI=1, intercept=TRUE, nu
     
     if(!is.null(newNames))
     {
-        modelCI$Coefficient <- revalue(x=modelCI$Coefficient, replace=newNames, warn_missing=FALSE)
+        modelCI$Coefficient <- plyr::revalue(x=modelCI$Coefficient, replace=newNames, warn_missing=FALSE)
     }
     
     # build confidence bounds columns
@@ -127,10 +125,14 @@ buildModelCI.default <- function(model, outerCI=2, innerCI=1, intercept=TRUE, nu
     # perform a transformation on the numbers if it's not the identity
     if(!identical(trans, identity))
     {
-        modelCI <- dplyr::mutate_at(.tbl=modelCI, .funs=dplyr::funs(trans), 
-                                       .vars=c('Value', 
-                                              'HighInner', 'HighOuter', 
-                                              'LowInner', 'LowOuter'))
+        modelCI <-
+            modelCI %>%
+            dplyr::mutate(
+                dplyr::across(
+                    .cols = c('Value', 'HighInner', 'HighOuter', 'LowInner', 'LowOuter'),
+                    trans
+                )
+            )
     }
 
     ## possible orderings of the coefficients
