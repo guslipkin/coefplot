@@ -32,7 +32,7 @@ the_coefs <- coefplot(mod2, sort='magnitude', innerCI=3, outerCI=6, plot=FALSE) 
 
 coefColor <- 'blue'
 the_plot <- ggplot(the_coefs, aes(x=Value, y=Coefficient)) + 
-    geom_errorbarh(aes(xmin=LowOuter, xmax=HighOuter), height=0, color=coefColor, size=0.1) + 
+    geom_errorbarh(aes(xmin=LowOuter, xmax=HighOuter), height=0, color=coefColor, linewidth=0.1) + 
     # geom_errorbarh(aes(xmin=LowInner, xmax=HighInner), height=0, color=coefColor, size=2) + 
     geom_vline(xintercept=0, linetype=2, color='grey') + 
     geom_point(color=coefColor, size=1) + 
@@ -41,12 +41,26 @@ the_plot <- ggplot(the_coefs, aes(x=Value, y=Coefficient)) +
     labs(y=NULL, x=NULL) + 
     theme(panel.grid=element_blank()) +
     theme_transparent()
-the_plot
-sticker(the_plot, package="coefplot", 
-        p_size=20, p_color=coefColor, p_y=1.52,
-        s_x=0.93, s_y=.82, s_width=1.3, s_height=1,
-        h_fill="white", white_around_sticker=FALSE, h_color='grey',
-        filename="inst/figures/coefplot_v2.png", spotlight=FALSE)
+the_plot %>%
+    sticker(
+        package = 'coefplot',
+        filename="inst/figures/logo.png",
+        h_fill = 'white',
+        white_around_sticker = FALSE,
+        h_color = 'grey',
+        p_color = coefColor,
+        spotlight = FALSE,
+        p_size = 20,
+        p_y = 1.52,
+        s_width = 2.3, s_x = .55,
+        s_height = 1.1, s_y = .8
+    )
+ggplot2::ggsave('man/figures/the_plot.png', the_plot, width = 6, height = 4, units = 'in', scale = .5, bg = 'white')
+# sticker(the_plot, package="coefplot", 
+#         p_size=20, p_color=coefColor, p_y=1.52,
+#         s_x=0.93, s_y=.82, s_width=1.3, s_height=1,
+#         h_fill="white", white_around_sticker=FALSE, h_color='grey',
+#         filename="inst/figures/coefplot_v2.png", spotlight=FALSE)
 
 # sticker(the_plot, package="coefplot", 
 #         p_size=20, p_color=coefColor,

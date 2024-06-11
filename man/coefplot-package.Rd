@@ -5,6 +5,8 @@
 \alias{coefplot-package}
 \title{coefplot: Plots Coefficients from Fitted Models}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Plots the coefficients from model objects. This very quickly shows the user the point estimates and confidence intervals for fitted models.
 }
 \author{
