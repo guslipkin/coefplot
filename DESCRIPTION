@@ -16,6 +16,7 @@ LazyLoad: yes
 Depends:
     ggplot2 (>= 2.0.0)
 Imports:
+    rlang,
     plyr,
     reshape2,
     useful,
@@ -39,4 +40,5 @@ Suggests:
     knitr,
     rmarkdown
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.1
+VignetteBuilder: knitr

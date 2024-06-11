@@ -2,9 +2,12 @@
 % Please edit documentation in R/coefPredMatching.r
 \name{matchCoefs}
 \alias{matchCoefs}
+\alias{matchCoefs.default}
 \title{matchCoefs}
 \usage{
 matchCoefs(model, ...)
+
+\method{matchCoefs}{default}(model, ...)
 }
 \arguments{
 \item{model}{Fitted model}

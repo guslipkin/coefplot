@@ -55,14 +55,14 @@ buildPlotting.default <- function(
     lwdOuter=if(interactive) 1 else unname((Sys.info()["sysname"] != 'Windows')*0.5), 
     pointSize=3 + interactive*5,
     color="blue", cex=.8, textAngle=0, numberAngle=0, 
-    shape=16, linetype=1,
+    shape=16, innerType=1, outerType=1,
     outerCI=2, innerCI=1, multi=FALSE, 
     zeroColor="grey", zeroLWD=1, zeroType=2, 
     numeric=FALSE, fillColor="grey", alpha=1/2,
     horizontal=FALSE, facet=FALSE, scales="free",
     value="Value", coefficient="Coefficient", 
     errorHeight=0, dodgeHeight=1,
-    interactive=FALSE
+    interactive=FALSE, linetype=1
 )
 {
     if(interactive)
@@ -84,13 +84,13 @@ buildPlotting.default <- function(
     outerCIGeom <- geom_errorbarh(
         aes_string(xmin="LowOuter", xmax="HighOuter", color="Model", linetype="Model"), 
         lwd=lwdOuter, height=errorHeight, position=position_dodgev(height=dodgeHeight),
-        na.rm=TRUE
+        na.rm=TRUE, linetype=outerType
     )
     
     innerCIGeom <- geom_errorbarh(
         aes_string(xmin="LowInner", xmax="HighInner", color="Model", linetype="Model"),
         lwd=lwdInner, height=errorHeight, position=position_dodgev(height=dodgeHeight),
-        na.rm=TRUE
+        na.rm=TRUE, linetype=innerType
     )
     
     # ribbon layer
@@ -107,7 +107,7 @@ buildPlotting.default <- function(
     xScale <- list(None=NULL, Single=scale_x_discrete())
     
     # faceting info
-    faceting <- list(None=NULL, Display=facet_wrap(~Checkers, scales=scales))
+    faceting <- list(None=NULL, Display=facet_wrap('Coefficient', scales=scales))
     
     # for a regular coefplot or a multiplot in seperate facets
     #p <- ggplot(data=modelCI, aes_string(x=value))

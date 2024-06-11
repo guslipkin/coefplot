@@ -10,6 +10,8 @@ Status](https://img.shields.io/codecov/c/github/jaredlander/coefplot/master.svg)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# Coefplot
+
 Coefplot is a package for plotting the coefficients and standard errors
 from a variety of models. Currently lm, glm, glmnet, maxLik, rxLinMod,
 rxGLM and rxLogit are supported.

@@ -2,9 +2,24 @@
 % Please edit documentation in R/coefPredMatching.r
 \name{getCoefsFromPredictors}
 \alias{getCoefsFromPredictors}
+\alias{getCoefsFromPredictors.default}
+\alias{getCoefsFromPredictorsRevo}
+\alias{getCoefsFromPredictors.rxLinMod}
+\alias{getCoefsFromPredictors.rxLogit}
+\alias{getCoefsFromPredictors.rxGlm}
 \title{getCoefsFromPredictors}
 \usage{
 getCoefsFromPredictors(model, predictors, ...)
+
+\method{getCoefsFromPredictors}{default}(model, predictors = NULL, strict = FALSE, ...)
+
+getCoefsFromPredictorsRevo(model, predictors = NULL, strict = FALSE, ...)
+
+\method{getCoefsFromPredictors}{rxLinMod}(model, predictors = NULL, strict = FALSE, ...)
+
+\method{getCoefsFromPredictors}{rxLogit}(model, predictors = NULL, strict = FALSE, ...)
+
+\method{getCoefsFromPredictors}{rxGlm}(model, predictors = NULL, strict = FALSE, ...)
 }
 \arguments{
 \item{model}{A fitted model}
@@ -12,6 +27,8 @@ getCoefsFromPredictors(model, predictors, ...)
 \item{predictors}{A character vector of predictors to match against}
 
 \item{\dots}{further arguments}
+
+\item{strict}{Logical specifying if interactions terms should be included (\code{FALSE}) or just the main terms (\code{TRUE}).}
 }
 \value{
 A character vector of coefficients listing the coefficients that match the predictor

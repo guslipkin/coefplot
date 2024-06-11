@@ -2,9 +2,15 @@
 % Please edit documentation in R/coefPredMatching.r
 \name{get.assign}
 \alias{get.assign}
+\alias{get.assign.lm}
+\alias{get.assign.glm}
 \title{get.assign}
 \usage{
 get.assign(model, ...)
+
+\method{get.assign}{lm}(model, ...)
+
+\method{get.assign}{glm}(model, ...)
 }
 \arguments{
 \item{model}{Fitted model}

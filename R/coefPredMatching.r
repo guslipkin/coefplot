@@ -18,27 +18,17 @@ get.assign <- function(model, ...)
     UseMethod("get.assign")
 }
 
-#' @title get.assign.lm
-#' @description The assignment vector for an lm model
-#' @details Gets relative positions of predictors
-#' @aliases get.assign.lm
-#' @author Jared P. Lander
-#' @param model Fitted model
-#' @param \dots Further arguments
-#' @return The assignment vector
+#' @export get.assign.lm
+#' @export
+#' @rdname get.assign
 get.assign.lm <- function(model, ...)
 {
     model$assign
 }
 
-#' @title get.assign.glm
-#' @description The assignment vector for a glm model
-#' @details Gets relative positions of predictors
-#' @aliases get.assign.glm
-#' @author Jared P. Lander
-#' @param model Fitted model
-#' @param \dots Further arguments
-#' @return The assignment vector
+#' @export get.assign.glm
+#' @export
+#' @rdname get.assign
 get.assign.glm <- function(model, ...)
 {
     # build model.matrix
@@ -77,15 +67,9 @@ matchCoefs <- function(model, ...)
     UseMethod(generic="matchCoefs")
 }
 
-#' @title matchCoefs.default
-#' @description Match coefficients to predictors
-#' @details Matches coefficients to predictors using information from model matrices
-#' @author Jared P. Lander
-#' @aliases matchCoefs.default
-#' @import reshape2
-#' @param model Fitted model
-#' @param \dots Further arguments
-#' @return a data.frame matching predictors to coefficients
+#' @export matchCoefs.default
+#' @export
+#' @rdname matchCoefs
 matchCoefs.default <- function(model, ...)
 {
     # get the terms
@@ -167,15 +151,9 @@ getCoefsFromPredictors <- function(model, predictors, ...)
 }
 
 
-#' @title getCoefsFromPredictors.default
-#' 
-#' @description Default function (lm, glm) for matching coefficients with predictors
-#' 
-#' @details The user specifies predictors whose coefficients should be included in the coefplot.
-#' @aliases getCoefsFromPredictors.default
-#' @author Jared P. Lander
-#' @return A character vector of coefficients listing the coefficients that match the predictor
-#' @param model A fitted model
+#' @export getCoefsFromPredictors.default
+#' @export
+#' @rdname getCoefsFromPredictors
 #' @param predictors A character vector of predictors to match against.  Interactions can be explicitly specified by VariableA:VariableB.
 #' @param strict Logical specifying if interactions terms should be included (\code{FALSE}) or just the main terms (\code{TRUE}).
 #' @param \dots further arguments
@@ -208,15 +186,9 @@ getCoefsFromPredictors.default <- function(model, predictors=NULL, strict=FALSE,
 }
 
 
-#' @title getCoefsFromPredictorsRevo
-#' 
-#' @description Function that does the work for Revo models for matching coefficients with predictors
-#' 
-#' @details The user specifies predictors whose coefficients should be included in the coefplot.
-#' @aliases getCoefsFromPredictorsRevo
-#' @author Jared P. Lander
-#' @return A character vector of coefficients listing the coefficients that match the predictor.  As of now interactions cannot be explicitly specified.
-#' @param model A fitted model
+#' @export getCoefsFromPredictors.default
+#' @export
+#' @rdname getCoefsFromPredictors
 #' @param predictors A character vector of predictors to match against
 #' @param strict Logical specifying if interactions terms should be included (\code{FALSE}) or just the main terms (\code{TRUE}).
 #' @param \dots further arguments
@@ -271,15 +243,9 @@ doRegex <- function(x, matchAgainst, pattern="(^| )%s($|,|=)")
 }
 
 
-#' @title getCoefsFromPredictors.rxLinMod
-#' 
-#' @description Function for matching coefficients with predictors for rxLinMod
-#' 
-#' @details The user specifies predictors whose coefficients should be included in the coefplot.
-#' @aliases getCoefsFromPredictors.rxLinMod
-#' @author Jared P. Lander
-#' @return A character vector of coefficients listing the coefficients that match the predictor
-#' @param model A fitted model
+#' @export getCoefsFromPredictors.rxLinMod
+#' @export
+#' @rdname getCoefsFromPredictors
 #' @param predictors A character vector of predictors to match against
 #' @param strict Logical specifying if interactions terms should be included (\code{FALSE}) or just the main terms (\code{TRUE}).
 #' @param \dots further arguments
@@ -289,15 +255,9 @@ getCoefsFromPredictors.rxLinMod <- function(model, predictors=NULL, strict=FALSE
 }
 
 
-#' @title getCoefsFromPredictors.rxLogit
-#' 
-#' @description Function for matching coefficients with predictors for rxLogit
-#' 
-#' @details The user specifies predictors whose coefficients should be included in the coefplot.
-#' @aliases getCoefsFromPredictors.rxLogit
-#' @author Jared P. Lander
-#' @return A character vector of coefficients listing the coefficients that match the predictor
-#' @param model A fitted model
+#' @export getCoefsFromPredictors.rxLogit
+#' @export
+#' @rdname getCoefsFromPredictors
 #' @param predictors A character vector of predictors to match against
 #' @param strict Logical specifying if interactions terms should be included (\code{FALSE}) or just the main terms (\code{TRUE}).
 #' @param \dots further arguments
@@ -307,15 +267,9 @@ getCoefsFromPredictors.rxLogit <- function(model, predictors=NULL, strict=FALSE,
 }
 
 
-#' @title getCoefsFromPredictors.rxGlm
-#' 
-#' @description Function for matching coefficients with predictors for rxGlm
-#' 
-#' @details The user specifies predictors whose coefficients should be included in the coefplot.
-#' @aliases getCoefsFromPredictors.rxGlm
-#' @author Jared P. Lander
-#' @return A character vector of coefficients listing the coefficients that match the predictor
-#' @param model A fitted model
+#' @export getCoefsFromPredictors.rxGlm
+#' @export
+#' @rdname getCoefsFromPredictors
 #' @param predictors A character vector of predictors to match against
 #' @param strict Logical specifying if interactions terms should be included (\code{FALSE}) or just the main terms (\code{TRUE}).
 #' @param \dots further arguments

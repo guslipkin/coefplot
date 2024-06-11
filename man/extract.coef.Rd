@@ -2,25 +2,68 @@
 % Please edit documentation in R/extractCoef.r
 \name{extract.coef}
 \alias{extract.coef}
-\title{extract.coef}
+\alias{extract.coef.default}
+\alias{extract.coef.lm}
+\alias{extract.coef.glm}
+\alias{extract.coef.rxLinMod}
+\alias{extract.coef.rxGlm}
+\alias{extract.coef.rxLogit}
+\alias{extract.coef.glmnet}
+\alias{extract.coef.cv.glmnet}
+\alias{extract.coef.maxLik}
+\alias{extract.coef.xgb.Booster}
+\title{extract.coef.default}
 \usage{
 extract.coef(model, ...)
+
+\method{extract.coef}{default}(model, ...)
+
+\method{extract.coef}{lm}(model, ...)
+
+\method{extract.coef}{glm}(model, ...)
+
+\method{extract.coef}{rxLinMod}(model, ...)
+
+\method{extract.coef}{rxGlm}(model, ...)
+
+\method{extract.coef}{rxLogit}(model, ...)
+
+\method{extract.coef}{glmnet}(model, lambda = stats::median(model$lambda), ...)
+
+\method{extract.coef}{cv.glmnet}(model, lambda = "lambda.min", ...)
+
+\method{extract.coef}{maxLik}(model, ...)
+
+\method{extract.coef}{xgb.Booster}(
+  model,
+  feature_names = NULL,
+  removeNonSelected = TRUE,
+  zero_threshold = 0.001,
+  ...
+)
 }
 \arguments{
 \item{model}{Model object to extract information from.}
 
 \item{\dots}{Further arguments}
+
+\item{feature_names}{Names of coefficients}
+
+\item{removeNonSelected}{If \code{TRUE} (default) do not return the non-selected (0) coefficients}
+
+\item{zero_threshold}{Since \code{coefficients} from 
+\code{\link[xgboost]{xgboost}} are not exactly zero, 
+this is the threshold under which a coefficient is considered zero}
 }
 \value{
 A \code{\link{data.frame}} containing the coefficient, the standard 
 error and the variable name.
 }
 \description{
-Extract Coefficient Information from glm Models
+Extract Coefficient Information from Models
 }
 \details{
-Gets the coefficient values and standard errors, and variable names from a 
-glm model.
+Gets the coefficient values and standard errors, and variable names from a model.
 }
 \examples{
 \dontrun{
@@ -36,6 +79,109 @@ extract.coef(mod3)
 
 mod4 <- rxLinMod(price ~ carat*cut + x, diamonds)
 }
+
+\dontrun{
+library(ggplot2)
+library(coefplot)
+data(diamonds)
+mod1 <- lm(price ~ carat + cut + x, data=diamonds)
+extract.coef(mod1)
+}
+
+\dontrun{
+library(ggplot2)
+data(diamonds)
+library(coefplot)
+mod1 <- lm(price ~ carat + cut + x, data=diamonds)
+extract.coef(mod1)
+}
+
+\dontrun{
+library(ggplot2)
+data(diamonds)
+library(coefplot)
+mod2 <- glm(price > 10000 ~ carat + cut + x, data=diamonds, family=binomial(link="logit"))
+extract.coef(mod2)
+}
+
+\dontrun{
+library(ggplot2)
+data(diamonds)
+mod3 <- rxLinMod(price ~ carat + cut + x, data=diamonds)
+extract.coef(mod3)
+}
+
+\dontrun{
+library(ggplot2)
+data(diamonds)
+mod4 <- rxGlm(price ~ carat + cut + x, data=diamonds)
+mod5 <- rxGlm(price > 10000 ~ carat + cut + x, data=diamonds, fmaily="binomial")
+extract.coef(mod4)
+extract.coef(mod5)
+}
+
+\dontrun{
+library(ggplot2)
+data(diamonds)
+mod6 <- rxLogit(price > 10000 ~ carat + cut + x, data=diamonds)
+extract.coef(mod6)
+}
+
+\dontshow{if(requireNamespace('glmnet', quietly=TRUE))\{}
+library(glmnet)
+library(ggplot2)
+library(useful)
+data(diamonds)
+diaX <- build.x(price ~ carat + cut + x - 1, data=diamonds, contrasts = TRUE)
+diaY <- build.y(price ~ carat + cut + x - 1, data=diamonds)
+modG1 <- glmnet(x=diaX, y=diaY)
+extract.coef(modG1)
+\dontshow{\}}
+
+\dontshow{if(requireNamespace('glmnet', quietly=TRUE))\{}
+library(glmnet)
+library(ggplot2)
+library(useful)
+data(diamonds)
+diaX <- useful::build.x(price ~ carat + cut + x - 1, data=diamonds, 
+ contrasts=FALSE)
+diaY <- useful::build.y(price ~ carat + cut + x - 1, data=diamonds)
+modG1 <- cv.glmnet(x=diaX, y=diaY, k=5)
+extract.coef(modG1)
+\dontshow{\}}
+
+\dontshow{
+if(requireNamespace('maxLik', quietly=TRUE))
+\{
+}
+library(maxLik)
+loglik <- function(param) {
+ mu <- param[1]
+ sigma <- param[2]
+ ll <- -0.5*N*log(2*pi) - N*log(sigma) - sum(0.5*(x - mu)^2/sigma^2)
+ll
+}
+x <- rnorm(1000, 1, 2) # use mean=1, stdd=2
+N <- length(x)
+res <- maxLik(loglik, start=c(0,1)) # use 'wrong' start values
+extract.coef(res)
+\dontshow{\}}
+
+\dontshow{
+if(requireNamespace('xgboost', quietly=TRUE))\{}
+library(xgboost)
+data(diamonds, package='ggplot2')
+diaX <- useful::build.x(price ~ carat + cut + x, data=diamonds, contrasts=FALSE)
+diaY <- useful::build.y(price ~ carat + cut + x, data=diamonds)
+xg1 <- xgb.train(data=xgb.DMatrix(data=diaX, label=diaY), 
+booster='gblinear',
+objective='reg:squarederror', eval_metric='rmse',
+nrounds=50
+)
+extract.coef(xg1)
+extract.coef(xg1, zero_threshold=0)
+extract.coef(xg1, feature_names=colnames(diaX))
+\dontshow{\}}
 
 }
 \author{

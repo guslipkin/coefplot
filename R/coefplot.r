@@ -19,6 +19,7 @@
 #' @param model The fitted model with coefficients to be plotted
 #' @param \dots See \code{\link{coefplot.lm}} for argument details
 #' @return A ggplot2 object or data.frame.  See details in \code{\link{coefplot.lm}} for more information
+#' @rdname coefplot
 #' @export coefplot plotcoef
 #' @keywords coefplot dotplot coefficient coefficients model lm glm rxLinMod linear
 #' @import ggplot2 plyr useful
@@ -67,6 +68,8 @@ coefplot <- function(model, ...)
 #' @param outerCI How wide the outer confidence interval should be, normally 2 standard deviations.  If 0, then there will be no outer confidence interval.
 #' @param lwdInner The thickness of the inner confidence interval
 #' @param lwdOuter The thickness of the outer confidence interval
+#' @param innerType The type of the inner CI line, 0 will mean no line
+#' @param outerType The type of the outer CI line, 0 will mean no line
 #' @param pointSize Size of coefficient point
 #' @param color The color of the points and lines
 #' @param shape The shape of the points
@@ -85,7 +88,7 @@ coefplot <- function(model, ...)
 #' @param alpha The transparency level of the numeric factor's confidence bound.  Currently not available.
 #' @param horizontal logical; If the plot should be displayed horizontally.  Currently not available.
 #' @param intercept logical; Whether the Intercept coefficient should be plotted
-#' @param interceptName Specifies name of intercept it case it is not the default of "(Intercept").
+#' @param interceptName Specifies name of intercept it case it is not the default of "(Intercept"). Currently not available.
 #' @param plot logical; If the plot should be drawn, if false then a data.frame of the values will be returned
 #' @param predictors A character vector specifying which coefficients to keep.  Each individual coefficient can be specified.  Use predictors to specify entire factors.
 #' @param coefficients A character vector specifying which factor coefficients to keep.  It will keep all levels and any interactions, even if those are not listed.
@@ -95,7 +98,7 @@ coefplot <- function(model, ...)
 ### non-listed arguments
 #' @param trans A transformation function to apply to the values and confidence intervals.  \code{identity} by default.  Use \code{invlogit} for binary regression.
 #' @param factors Vector of factor variables that will be the only ones shown
-#' @param only logical; If factors has a value this determines how interactions are treated.  True means just that variable will be shown and not its interactions.  False means interactions will be included.
+#' @param only logical; If factors has a value this determines how interactions are treated.  True means just that variable will be shown and not its interactions.  False means interactions will be included. Currently not available.
 #' @param shorten logical or character; If \code{FALSE} then coefficients for factor levels will include their variable name.  If \code{TRUE} coefficients for factor levels will be stripped of their variable names.  If a character vector of variables only coefficients for factor levels associated with those variables will the variable names stripped.  Currently not available.
 #' @param interactive If \code{TRUE} an interactive plot is generated instead of \code{ggplot2}
 #' @param \dots Arguments passed on to other functions
@@ -103,7 +106,7 @@ coefplot <- function(model, ...)
 #' @seealso \code{\link{lm}} \code{\link{glm}} \code{\link{ggplot}} \code{\link{coefplot}} \code{\link{plotcoef}}
 #' @export coefplot.default
 #' @export
-#' @describeIn coefplot Default method
+#' @rdname coefplot
 #' @method coefplot default
 #' @examples
 #' 
@@ -120,7 +123,7 @@ coefplot <- function(model, ...)
 coefplot.default <- function(
     model, title="Coefficient Plot", 
     xlab="Value", ylab="Coefficient", 
-    innerCI=1, outerCI=2, 
+    innerCI=1, outerCI=2, innerType=1, outerType=1,
     lwdInner=1 + interactive*2, 
     lwdOuter=if(interactive) 1 else unname((Sys.info()["sysname"] != 'Windows')*0.5), 
     pointSize=3 + interactive*5, 
@@ -162,11 +165,12 @@ coefplot.default <- function(
     p <- coefplot.data.frame(model=modelCI,
                         #modelMeltInner=modelMeltInner, modelMeltOuter=modelMeltOuter,
                        title=title, xlab=xlab, ylab=ylab,
-                       lwdInner=lwdInner, lwdOuter=lwdOuter, pointSize=pointSize, color=color, cex=cex, textAngle=textAngle, 
+                       lwdInner=lwdInner, lwdOuter=lwdOuter, innerType=innerType, outerType=outerType, 
+                       pointSize=pointSize, color=color, cex=cex, textAngle=textAngle, 
                        numberAngle=numberAngle, zeroColor=zeroColor, zeroLWD=zeroLWD, outerCI=outerCI, innerCI=innerCI, multi=FALSE,
                        zeroType=zeroType, numeric=numeric, fillColor=fillColor, alpha=alpha, 
                        horizontal=horizontal, facet=facet, scales=scales, 
-                       interactive=interactive)
+                       interactive=interactive, shape=shape)
     
     #rm(modelCI);    	# housekeeping
 	return(p)		# return the ggplot object
@@ -179,6 +183,7 @@ coefplot.default <- function(
 #' @author Jared P. Lander
 #' @export coefplot.data.frame
 #' @export
+#' @rdname coefplot
 #' @param model A data.frame like that built from coefplot(..., plot=FALSE)
 #' @param title The name of the plot, if NULL then no name is given
 #' @param xlab The x label
@@ -191,7 +196,8 @@ coefplot.default <- function(
 #' @param pointSize Size of coefficient point
 #' @param color The color of the points and lines
 #' @param shape The shape of the points
-#' @param linetype The linetype of the error bars
+#' @param innerType The type of the inner CI line, 0 will mean no line
+#' @param outerType The type of the outer CI line, 0 will mean no line
 #' @param cex The text size multiplier, currently not used
 #' @param textAngle The angle for the coefficient labels, 0 is horizontal
 #' @param numberAngle The angle for the value labels, 0 is horizontal
@@ -230,7 +236,7 @@ coefplot.data.frame <- function(
     lwdOuter=if(interactive) 1 else unname((Sys.info()["sysname"] != 'Windows')*0.5), 
     pointSize=3 + interactive*5, 
     color="blue", cex=.8, textAngle=0, numberAngle=0, 
-    shape=16, linetype=1,
+    shape=16, innerType=1, outerType=1,
     outerCI=2, innerCI=1, multi=FALSE, 
     zeroColor="grey", zeroLWD=1, zeroType=2, 
     numeric=FALSE, fillColor="grey", alpha=1/2,
@@ -244,125 +250,52 @@ coefplot.data.frame <- function(
         modelCI=model,
         #modelMeltInner=modelMeltInner, modelMeltOuter=modelMeltOuter,
         title=title, xlab=xlab, ylab=ylab,
-        lwdInner=lwdInner, lwdOuter=lwdOuter, 
+        lwdInner=lwdInner, lwdOuter=lwdOuter, innerType=innerType, outerType=outerType,
         pointSize=pointSize, color=color, cex=cex, textAngle=textAngle, 
         numberAngle=numberAngle, zeroColor=zeroColor, zeroLWD=zeroLWD, 
         outerCI=outerCI, innerCI=innerCI, multi=FALSE,
         zeroType=zeroType, numeric=numeric, fillColor=fillColor, alpha=alpha, 
         horizontal=horizontal, facet=facet, scales=scales,
-        interactive=interactive
+        interactive=interactive, shape=shape
     )
 }
 
-#' coefplot.lm
-#' 
-# Dotplot for lm coefficients
-#'
-# A graphical display of the coefficients and standard errors from a fitted lm model
-#'
-# \code{\link{coefplot}} is the S3 generic method for plotting the coefficients from a fitted model.
-#'
-# For more information on this function and it's arguments see \code{\link{coefplot.default}}
-#'
-#' @aliases coefplot.lm
 #' @export coefplot.lm
 #' @export
-#' @method coefplot lm
-# @author Jared P. Lander
-#' @describeIn coefplot \code{lm}
-#' @param \dots All arguments are passed on to \code{\link{coefplot.default}}.  Please see that function for argument information.
-# @return A ggplot object.  See \code{\link{coefplot.lm}} for more information.
-#' @examples
-#' 
-#' model1 <- lm(price ~ carat + cut*color, data=diamonds)
-#' coefplot(model1)
+#' @rdname coefplot
 coefplot.lm <- function(...)
 {
     coefplot.default(...)
 }
 
-#' coefplot.glm
-#' 
-# Dotplot for glm coefficients
-#'
-# A graphical display of the coefficients and standard errors from a fitted glm model
-#'
-# \code{\link{coefplot}} is the S3 generic method for plotting the coefficients from a fitted model.
-#' 
-# \code{coefplot.glm} allows for plotting the coefficients on the transformed scale.
-#'
-#' For more information on this function and it's arguments see \code{\link{coefplot.default}}
-#'
-#' @aliases coefplot.glm
 #' @export coefplot.glm
 #' @export
-#' @method coefplot glm
-# @author Jared P. Lander
-#' @describeIn coefplot \code{glm}
-#' @param \dots All arguments are passed on to \code{\link{coefplot.default}}.  Please see that function for argument information.
-# @return A ggplot object.  See \code{\link{coefplot.lm}} for more information.
-#' @examples
-#' 
-#' model2 <- glm(price > 10000 ~ carat + cut*color, data=diamonds, family=binomial(link="logit"))
-#' coefplot(model2)
-#' coefplot(model2, trans=invlogit)
+#' @rdname coefplot
 coefplot.glm <- function(...)
 {
     coefplot.default(...)
 }
 
-#' @title coefplot.workflow
-#' @description Coefplot method for workflow objects
-#' @details Pulls model element out of workflow object then calls \code{coefplot}.
-# @author Jared P. Lander
-#' @describeIn coefplot \code{tidymodels workflows}
-#' @param model A workflow object
-#' @param \dots All arguments are passed on to \code{\link{coefplot.default}}.  Please see that function for argument information.
+#' @export coefplot.workflow
+#' @export
+#' @rdname coefplot
 coefplot.workflow <- function(model, ...)
 {
+    stopifnot(workflows::is_trained_workflow(model))
     coefplot.default(model$fit$fit$fit, ...)
 }
 
-#' @title coefplot.model_fit
-#' @description Coefplot method for parsnip objects
-#' @details Pulls model element out of parsnip object then calls \code{coefplot}.
-# @author Jared P. Lander
-#' @describeIn coefplot \code{parsnip}
-#' @param model A parsnip object
-#' @param \dots All arguments are passed on to \code{\link{coefplot.default}}.  Please see that function for argument information.
-#' 
+#' @export coefplot.model_fit
+#' @export
+#' @rdname coefplot
 coefplot.model_fit <- function(model, ...)
 {
     coefplot.default(model$fit, ...)
 }
 
-#' coefplot.rxGlm
-#' 
-# Dotplot for rxGlm coefficients
-#'
-# A graphical display of the coefficients and standard errors from a fitted rxGlm model
-#'
-# \code{\link{coefplot}} is the S3 generic method for plotting the coefficients from a fitted model.
-#'
-# For more information on this function and it's arguments see \code{\link{coefplot.default}}
-#'
-#' @aliases coefplot.rxGlm
 #' @export coefplot.rxGlm
 #' @export
-#' @method coefplot rxGlm
-# @author Jared P. Lander
-#' @describeIn coefplot \code{rxGlm}
-#' @param \dots All arguments are passed on to \code{\link{coefplot.default}}.  Please see that function for argument information.
-#' @return A ggplot object.  See \code{\link{coefplot.lm}} for more information.
-#' @examples
-#' 
-#' \dontrun{
-#' mod4 <- rxGlm(price ~ carat + cut + x, data=diamonds)
-#' mod5 <- rxGlm(price > 10000 ~ carat + cut + x, data=diamonds, family="binomial")
-#' coefplot(mod4)
-#' coefplot(mod5)
-#' }
-#' 
+#' @rdname coefplot
 coefplot.rxGlm <- function(...)
 {
     mf <- match.call(expand.dots=TRUE)
@@ -373,25 +306,9 @@ coefplot.rxGlm <- function(...)
     coefplot.default(...)
 }
 
-## just simply call coefplot.lm which will work just fine
-#' coefplot.rxLinMod
-#' 
-# Dotplot for rxLinMod coefficients
-#'
-# A graphical display of the coefficients and standard errors from a fitted rxLinMod model
-#'
-# \code{\link{coefplot}} is the S3 generic method for plotting the coefficients from a fitted model.
-#'
-# For more information on this function and it's arguments see \code{\link{coefplot.lm}}
-#'
-#' @aliases coefplot.rxLinMod
 #' @export coefplot.rxLinMod
 #' @export
-#' @method coefplot rxLinMod
-# @author Jared P. Lander www.jaredlander.com
-#' @describeIn coefplot \code{rxLinMod}
-#' @param \dots All arguments are passed on to \code{\link{coefplot.lm}}.  Please see that function for argument information.
-#' @return A ggplot object.  See \code{\link{coefplot.lm}} for more information.
+#' @rdname coefplot
 #' @examples
 #' 
 #' \dontrun{
@@ -409,28 +326,10 @@ coefplot.rxLinMod <- function(...)
     coefplot.default(...)
 }
 
-
-## just simply call coefplot.lm which will work just fine
-#' coefplot.rxLogit
-#' 
-# Dotplot for rxLogit coefficients
-#'
-# A graphical display of the coefficients and standard errors from a fitted rxLogit model
-#'
-# \code{\link{coefplot}} is the S3 generic method for plotting the coefficients from a fitted model.
-#'
-# For more information on this function and it's arguments see \code{\link{coefplot.lm}}
-#'
-#' @aliases coefplot.rxLogit
 #' @export coefplot.rxLogit
 #' @export
-#' @method coefplot rxLogit
-# @author Jared P. Lander www.jaredlander.com
-#' @describeIn coefplot \code{rxLogit}
-#' @param \dots All arguments are passed on to \code{\link{coefplot.lm}}.  Please see that function for argument information.
-#' @return A ggplot object.  See \code{\link{coefplot.lm}} for more information.
+#' @rdname coefplot
 #' @examples
-#' 
 #' \dontrun{
 #' data(diamonds)
 #' mod6 <- rxLogit(price > 10000 ~ carat + cut + x, data=diamonds)

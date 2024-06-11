@@ -2,22 +2,73 @@
 % Please edit documentation in R/buildPlottingFrame.r
 \name{buildModelCI}
 \alias{buildModelCI}
+\alias{buildModelCI.default}
 \title{buildModelCI}
 \usage{
 buildModelCI(model, ...)
+
+\method{buildModelCI}{default}(
+  model,
+  outerCI = 2,
+  innerCI = 1,
+  intercept = TRUE,
+  numeric = FALSE,
+  sort = c("natural", "magnitude", "alphabetical"),
+  predictors = NULL,
+  strict = FALSE,
+  coefficients = NULL,
+  newNames = NULL,
+  trans = identity,
+  decreasing = TRUE,
+  name = NULL,
+  interceptName = "(Intercept)",
+  ...
+)
 }
 \arguments{
 \item{model}{A Fitted model such as from lm, glm}
 
-\item{\dots}{Arguments passed on onto other methods}
+\item{\dots}{See Details for information on \code{factors}, \code{only} and \code{shorten}}
+
+\item{outerCI}{How wide the outer confidence interval should be, normally 2 standard deviations.  If 0, then there will be no outer confidence interval.}
+
+\item{innerCI}{How wide the inner confidence interval should be, normally 1 standard deviation.  If 0, then there will be no inner confidence interval.}
+
+\item{intercept}{logical; Whether the Intercept coefficient should be plotted}
+
+\item{numeric}{logical; If true and factors has exactly one value, then it is displayed in a horizontal graph with continuous confidence bounds.; not used for now.}
+
+\item{sort}{Determines the sort order of the coefficients.  Possible values are c("natural", "magnitude", "alphabetical")}
+
+\item{predictors}{A character vector specifying which variables to keep.  Each individual variable has to be specified, so individual levels of factors must be specified.  We are working on making this easier to implement, but this is the only option for now.}
+
+\item{strict}{If TRUE then predictors will only be matched to its own coefficients, not its interactions}
+
+\item{coefficients}{A character vector specifying which factor variables to keep.  It will keep all levels and any interactions, even if those are not listed.}
+
+\item{newNames}{Named character vector of new names for coefficients}
+
+\item{trans}{A transformation function to apply to the values and confidence intervals.  \code{identity} by default.  Use \code{invlogit} for binary regression.}
+
+\item{decreasing}{logical; Whether the coefficients should be ascending or descending}
+
+\item{name}{A name for the model, if NULL the call will be used}
+
+\item{interceptName}{Specifies name of intercept it case it is not the default of "(Intercept").}
 }
 \value{
+A \code{\link{data.frame}} listing coefficients and confidence bands.
+
 A \code{\link{data.frame}} listing coefficients and confidence bands.
 }
 \description{
 Construct Confidence Interval Values
+
+Construct Confidence Interval Values
 }
 \details{
+Takes a model and builds a data.frame holding the coefficient value and the confidence interval values.
+
 Takes a model and builds a data.frame holding the coefficient value and the confidence interval values.
 }
 \examples{
@@ -27,8 +78,16 @@ model1 <- lm(price ~ carat + cut, data=diamonds)
 coefplot:::buildModelCI(model1)
 coefplot(model1)
 
+
+data(diamonds, package='ggplot2')
+model1 <- lm(price ~ carat + cut, data=diamonds)
+coefplot:::buildModelCI(model1)
+coefplot(model1)
+
 }
 \seealso{
+\code{\link{coefplot}} \code{\link{multiplot}}
+
 \code{\link{coefplot}} \code{\link{multiplot}}
 }
 \author{

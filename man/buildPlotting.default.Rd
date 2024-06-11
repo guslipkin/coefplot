@@ -17,7 +17,8 @@ buildPlotting.default(
   textAngle = 0,
   numberAngle = 0,
   shape = 16,
-  linetype = 1,
+  innerType = 1,
+  outerType = 1,
   outerCI = 2,
   innerCI = 1,
   multi = FALSE,
@@ -34,7 +35,8 @@ buildPlotting.default(
   coefficient = "Coefficient",
   errorHeight = 0,
   dodgeHeight = 1,
-  interactive = FALSE
+  interactive = FALSE,
+  linetype = 1
 )
 }
 \arguments{
@@ -61,8 +63,6 @@ buildPlotting.default(
 \item{numberAngle}{The angle for the value labels, 0 is horizontal}
 
 \item{shape}{The shape of the points}
-
-\item{linetype}{The linetype of the error bars}
 
 \item{outerCI}{How wide the outer confidence interval should be, normally 2 standard deviations.  If 0, then there will be no outer confidence interval.}
 
@@ -97,6 +97,8 @@ buildPlotting.default(
 \item{dodgeHeight}{Amount of vertical dodging}
 
 \item{interactive}{If \code{TRUE} an interactive plot is generated instead of \verb{[ggplot2]}}
+
+\item{linetype}{The linetype of the error bars}
 }
 \value{
 a ggplot graph object

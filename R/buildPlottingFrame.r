@@ -36,6 +36,7 @@ buildModelCI <- function(model, ...)
 #' @aliases buildModelCI.default
 #' @export buildModelCI.default
 #' @export
+#' @rdname buildModelCI
 #' @method buildModelCI default
 #' @import plyr
 #' @param model A Fitted model such as from lm, glm

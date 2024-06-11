@@ -1,0 +1,176 @@
+---
+title: "Customising `coefplot`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Customising `coefplot`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(coefplot)
+dt <- mtcars
+dt$cyl <- as.factor(dt$cyl)
+model <- lm(mpg ~ wt*disp + cyl, data = dt)
+```
+
+## Default arguments
+
+```{r}
+coefplot(model)
+```
+
+## Labels
+
+### `title`, `xlab`, and `ylab`
+
+```{r}
+coefplot(
+  model,
+  title = 'This is my `coefplot`',
+  xlab = 'Coefficient Values',
+  ylab = 'Variables'
+)
+```
+
+### `textAngle` and `numberAngle`
+
+```{r}
+coefplot(
+  model,
+  textAngle = 90,
+  numberAngle = 45
+)
+```
+
+## Coefficients
+
+### `newNames`
+
+```{r}
+coefplot(
+  model,
+  newNames = c('cyl' = 'Cylinder', 'disp' = 'Displacement', 'wt' = 'Weight')
+)
+```
+
+### `predictors`, `strict`, and `coefficient`
+
+```{r}
+coefplot(
+  model,
+  predictors = c('wt')
+)
+
+coefplot(
+  model,
+  predictors = c('wt', 'disp'),
+  strict = TRUE
+)
+
+coefplot(
+  model,
+  coefficient = c('wt', 'cyl')
+)
+```
+
+### `innerCI`/`outerCI` and `lwdInner`/`lwdOuter` and `pointSize`
+
+```{r}
+coefplot(
+  model,
+  innerCI = 1.5,
+  lwdInner = 2,
+  outerCI = 3,
+  lwdOuter = .5,
+  pointSize = 3.5
+)
+```
+
+### `color`, `shape`, and `linetype`
+
+See the `ggplot2` documentation on [differentiation](https://ggplot2.tidyverse.org/reference/aes_linetype_size_shape.html) to learn more.
+
+```{r}
+coefplot(
+  model,
+  color = 'red',
+  shape = 23,
+  outerType = 2
+)
+```
+
+### `intercept`
+
+```{r}
+coefplot(
+  model,
+  intercept = FALSE
+)
+```
+
+## Display
+
+### `interactive`
+
+```{r}
+coefplot(
+  model,
+  interactive = TRUE
+)
+```
+
+
+### `trans`
+
+```{r}
+coefplot(
+  model,
+  trans = \(x) { x * .1 }
+)
+```
+
+
+### `zeroColor`, `zeroLWD`, and `zeroType`
+
+```{r}
+coefplot(
+  model,
+  zeroColor = 'red',
+  zeroLWD = 2,
+  zeroType = 'dotdash'
+)
+```
+
+### `facet` and `scales`
+
+```{r}
+coefplot(
+  model,
+  facet = TRUE,
+  scales = 'free'
+)
+```
+
+### `sort` and `decreasing`
+
+```{r}
+coefplot(
+  model,
+  sort = 'alphabetical'
+)
+
+coefplot(
+  model,
+  decreasing = TRUE
+)
+```
+
+

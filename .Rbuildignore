@@ -18,3 +18,7 @@ hex/
 ^CRAN-RELEASE$
 ^CRAN-SUBMISSION$
 revdep/
+docs/
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
