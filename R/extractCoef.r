@@ -166,7 +166,9 @@ extract.coef.rxLogit <- function(model, ...)
 #' @export extract.coef.glmnet
 #' @export
 #' @rdname extract.coef
-#' @inheritParams extract.coef
+#' @param model Model object to extract information from.
+#' @param lambda The median of the model lambda
+#' @param \dots Further arguments
 #' @examples
 #' \dontshow{if(requireNamespace('glmnet', quietly=TRUE))\{}
 #' library(glmnet)
@@ -197,7 +199,9 @@ extract.coef.glmnet <- function(model, lambda=stats::median(model$lambda), ...)
 #' @export extract.coef.cv.glmnet
 #' @export
 #' @rdname extract.coef
-#' @inheritParams extract.coef
+#' @param model Model object to extract information from.
+#' @param lambda 'lambda.min'
+#' @param \dots Further arguments
 #' @examples
 #' \dontshow{if(requireNamespace('glmnet', quietly=TRUE))\{}
 #' library(glmnet)

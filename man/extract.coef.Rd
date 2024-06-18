@@ -47,6 +47,8 @@ extract.coef(model, ...)
 
 \item{\dots}{Further arguments}
 
+\item{lambda}{'lambda.min'}
+
 \item{feature_names}{Names of coefficients}
 
 \item{removeNonSelected}{If \code{TRUE} (default) do not return the non-selected (0) coefficients}

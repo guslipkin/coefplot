@@ -12,5 +12,10 @@ Plots the coefficients from model objects. This very quickly shows the user the 
 \author{
 \strong{Maintainer}: Jared Lander \email{packages@jaredlander.com} (\href{https://orcid.org/0000-0002-7291-726X}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Gus Lipkin \email{gus@landeranalytics.com} [contributor]
+}
+
 }
 \keyword{internal}

@@ -64,6 +64,10 @@ buildPlotting.default(
 
 \item{shape}{The shape of the points}
 
+\item{innerType}{The line type of the inner confidence interval}
+
+\item{outerType}{The line type of the outer confidence interval}
+
 \item{outerCI}{How wide the outer confidence interval should be, normally 2 standard deviations.  If 0, then there will be no outer confidence interval.}
 
 \item{innerCI}{How wide the inner confidence interval should be, normally 1 standard deviation.  If 0, then there will be no inner confidence interval.}

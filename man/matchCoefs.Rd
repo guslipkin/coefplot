@@ -25,8 +25,8 @@ Matches coefficients to predictors using information from model matrices
 }
 \examples{
 \dontrun{
-require(reshape2)
 require(plyr)
+require(reshape2)
 data("tips", package="reshape2")
 mod1 <- lm(tip ~ total_bill * sex + day, tips)
 mod2 <- lm(tip ~ total_bill * sex + day - 1, tips)

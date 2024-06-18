@@ -19,6 +19,8 @@
 #' @param pointSize Size of coefficient point
 #' @param color The color of the points and lines
 #' @param shape The shape of the points
+#' @param innerType The line type of the inner confidence interval
+#' @param outerType The line type of the outer confidence interval
 #' @param linetype The linetype of the error bars
 #' @param cex The text size multiplier, currently not used
 #' @param textAngle The angle for the coefficient labels, 0 is horizontal

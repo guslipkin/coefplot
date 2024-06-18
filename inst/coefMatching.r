@@ -56,8 +56,8 @@ get.assign.glm <- function(model, ...)
 #' @param \dots Further arguments
 #' @return a data.frame matching predictors to coefficients
 #' @examples
-#' require(reshape2)
 #' require(plyr)
+#' require(reshape2)
 #' data("tips", package="reshape2")
 #' mod1 <- lm(tip ~ total_bill * sex + day, tips)
 #' mod2 <- lm(tip ~ total_bill * sex + day - 1, tips)
@@ -116,7 +116,7 @@ matchCoefs.default <- function(model, ...)
     factorMat$.Type <- attr(theTerms, "dataClasses")
     
     # melt it down for comparison
-    factorMelt <- reshape2::melt(factorMat, id.vars=c(".Pred", ".Type"), variable.name="Term")
+    factorMelt <- tidyr::pivot_longer(factorMat, cols = c(-'.Pred', -'.Type'), names_to = 'Term')
     factorMelt$Term <- as.character(factorMelt$Term)
     
     # only keep rows where there's a match

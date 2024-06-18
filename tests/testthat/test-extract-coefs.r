@@ -1,6 +1,7 @@
 context("Extracting Coefficients")
 
 # we need data
+require(reshape2)
 data("tips", package="reshape2")
 mod1 <- lm(tip ~ total_bill, data=tips)
 mod2 <- lm(tip ~ total_bill + sex, data=tips)

@@ -1,44 +1,48 @@
-Package: coefplot
 Type: Package
+Package: coefplot
 Title: Plots Coefficients from Fitted Models
-Authors@R: 
-    person(given = "Jared",
-           family = "Lander",
-           role = c("aut", "cre"),
-           email = "packages@jaredlander.com",
-           comment = c(ORCID = "0000-0002-7291-726X"))
 Version: 1.2.8
 Date: 2022-01-12
+Authors@R: c(
+    person("Jared", "Lander", , "packages@jaredlander.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-7291-726X")),
+    person("Gus", "Lipkin", , "gus@landeranalytics.com", role = "ctb")
+  )
 Maintainer: Jared P. Lander <packages@jaredlander.com>
-Description: Plots the coefficients from model objects. This very quickly shows the user the point estimates and confidence intervals for fitted models.
+Description: Plots the coefficients from model objects. This very quickly
+    shows the user the point estimates and confidence intervals for fitted
+    models.
 License: BSD_3_clause + file LICENSE
-LazyLoad: yes
 Depends:
     ggplot2 (>= 2.0.0)
 Imports:
-    rlang,
-    plyr,
-    reshape2,
-    useful,
-    stats,
     dplyr (>= 0.6.0),
     dygraphs,
-    tibble,
     magrittr,
+    plotly,
+    plyr,
     purrr,
-    plotly
-ByteCompile: TRUE
-Packaged: 2018-01-02 Jared
+    rlang,
+    stats,
+    tibble,
+    tidyr,
+    tidyselect,
+    useful
 Suggests:
-    testthat (>= 2.0.0),
     covr,
     glmnet,
-    maxLik,
-    xgboost,
-    workflows,
-    parsnip,
     knitr,
-    rmarkdown
+    maxLik,
+    parsnip,
+    reshape2,
+    rmarkdown,
+    testthat (>= 2.0.0),
+    workflows,
+    xgboost
+VignetteBuilder: 
+    knitr
+ByteCompile: TRUE
 Encoding: UTF-8
+LazyLoad: yes
+Packaged: 2018-01-02 Jared
 RoxygenNote: 7.3.1
-VignetteBuilder: knitr
